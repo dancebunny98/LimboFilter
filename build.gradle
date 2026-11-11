@@ -65,6 +65,7 @@ dependencies {
     implementation("net.elytrium:pcap:$pcapVersion")
 
     compileOnly("com.github.spotbugs:spotbugs-annotations:$spotbugsVersion")
+    compileOnly("org.checkerframework:checker-qual:$checkerVersion")
 }
 
 shadowJar {
