@@ -36,9 +36,19 @@ repositories {
 dependencies {
     compileOnly("net.elytrium.limboapi:api:$limboapiVersion")
 
-    compileOnly("com.velocitypowered:velocity-api:$velocityVersion")
-    annotationProcessor("com.velocitypowered:velocity-api:$velocityVersion")
-    compileOnly("com.velocitypowered:velocity-proxy:$velocityVersion") // From Elytrium Repo.
+    def velocityLocalJar = project.findProperty("velocityLocalJar")
+    if (velocityLocalJar != null) {
+        def velocityJar = file(velocityLocalJar)
+        if (!velocityJar.isFile()) {
+            throw new GradleException("velocityLocalJar does not point to a file: ${velocityJar}")
+        }
+        compileOnly(files(velocityJar))
+        annotationProcessor(files(velocityJar))
+    } else {
+        compileOnly("com.velocitypowered:velocity-api:$velocityVersion")
+        annotationProcessor("com.velocitypowered:velocity-api:$velocityVersion")
+        compileOnly("com.velocitypowered:velocity-proxy:$velocityVersion") // From Elytrium Repo.
+    }
 
     // Needs for some velocity methods.
     compileOnly("io.netty:netty-codec:$nettyVersion")

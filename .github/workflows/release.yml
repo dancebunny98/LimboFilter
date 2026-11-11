@@ -10,13 +10,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
+      - name: Checkout LimboAPI dependency
+        uses: actions/checkout@v4.2.2
+        with:
+          repository: dancebunny98/LimboAPI
+          ref: master
+          path: limboapi
       - name: Set up JDK
         uses: actions/setup-java@v4.7.0
         with:
           distribution: temurin
           java-version: 25
+      - name: Publish LimboAPI API locally
+        working-directory: limboapi
+        run: ./gradlew :api:publishToMavenLocal
       - name: Build LimboFilter
-        run: ./gradlew build
+        run: ./gradlew build -PvelocityLocalJar=limboapi/velocity-4.3.1-45.jar
       - name: Upload LimboFilter
         uses: actions/upload-artifact@v4.6.2
         with:
