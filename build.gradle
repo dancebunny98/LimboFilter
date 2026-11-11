@@ -34,7 +34,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("net.elytrium.limboapi:api:$limboapiVersion")
+    def limboapiJar = file("libs/limboapi-${limboapiVersion}.jar")
+    if (limboapiJar.isFile()) {
+        compileOnly(files(limboapiJar))
+    } else {
+        compileOnly("net.elytrium.limboapi:api:$limboapiVersion")
+    }
 
     def velocityLocalJar = project.findProperty("velocityLocalJar")
     if (velocityLocalJar != null) {

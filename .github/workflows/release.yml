@@ -7,6 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -46,9 +50,10 @@ jobs:
           asset_name: ${{ steps.find-jar.outputs.jarname }}
           asset_content_type: application/java-archive
       - name: Upload to Modrinth
+        if: ${{ env.MODRINTH_TOKEN != '' }}
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
+          token: ${{ env.MODRINTH_TOKEN }}
           file_path: build/libs/${{ steps.find-jar.outputs.jarname }}
           name: Release ${{ github.event.release.tag_name }}
           version: ${{ github.event.release.tag_name }}

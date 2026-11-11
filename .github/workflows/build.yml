@@ -1,6 +1,7 @@
 name: Java CI with Gradle
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -11,6 +12,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
@@ -61,10 +66,10 @@ jobs:
           name: Dev-build ${{ steps.git-version.outputs.id }}
           tag: dev-build
       - name: Upload to Modrinth
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && env.MODRINTH_TOKEN != '' }}
         uses: RubixDev/modrinth-upload@v1.0.0
         with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
+          token: ${{ env.MODRINTH_TOKEN }}
           file_path: build/libs/${{ steps.find-jar.outputs.jarname }}
           name: Dev-build ${{ steps.git-version.outputs.id }}
           version: ${{ steps.git-version.outputs.id }}
