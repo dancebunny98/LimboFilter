@@ -41,6 +41,11 @@ dependencies {
         compileOnly("net.elytrium.limboapi:api:$limboapiVersion")
     }
 
+    compileOnly("net.elytrium.commons:config:$elytriumCommonsVersion")
+    compileOnly("net.elytrium.commons:utils:$elytriumCommonsVersion")
+    compileOnly("net.elytrium.commons:velocity:$elytriumCommonsVersion")
+    compileOnly("net.elytrium.commons:kyori:$elytriumCommonsVersion")
+
     def velocityLocalJar = project.findProperty("velocityLocalJar")
     if (velocityLocalJar != null) {
         def velocityJar = file(velocityLocalJar)
